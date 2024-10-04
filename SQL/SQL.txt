@@ -1,0 +1,41 @@
+CREATE TABLE coffee_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,                  -- ID sản phẩm
+    name VARCHAR(255) NOT NULL,                          -- Tên sản phẩm
+    description TEXT,                                     -- Mô tả sản phẩm
+    price DECIMAL(10, 2) NOT NULL,                       -- Giá sản phẩm
+    image_url VARCHAR(255),                               -- Hình ảnh sản phẩm
+    coffee_type VARCHAR(100),                             -- Loại cà phê
+    origin VARCHAR(100),                                  -- Nguồn gốc
+    weight VARCHAR(50),                                   -- Khối lượng
+    flavor VARCHAR(255),                                  -- Hương vị
+    production_date DATE,                                 -- Ngày sản xuất
+    expiry_date DATE,                                     -- Ngày hết hạn
+    status ENUM('in_stock', 'out_of_stock') DEFAULT 'in_stock',  -- Tình trạng
+    rating DECIMAL(3, 2) CHECK (rating >= 0 AND rating <= 5), -- Đánh giá từ 0.00 đến 5.00
+    quantity INT DEFAULT 0,                               -- Số lượng đã bán
+    is_new BOOLEAN DEFAULT FALSE,                         -- Sản phẩm mới
+    is_featured BOOLEAN DEFAULT FALSE,                    -- Sản phẩm nổi bật
+    is_best_seller BOOLEAN DEFAULT FALSE ,                 -- Sản phẩm bán chạy
+    is_normal BOOLEAN DEFAULT FALSE							-- San pham bt
+);
+
+
+
+
+
+
+
+
+
+
+
+//////Them du lieu
+INSERT INTO coffee_products (name, description, price, image_url, coffee_type, origin, weight, flavor, production_date, expiry_date, status, rating, quantity, is_new, is_featured, is_best_seller, is_normal) VALUES 
+('Cà phê Arabica Premium', 'Cà phê Arabica chất lượng cao, hương vị thanh khiết.', 180000, 'img/Arabica_Premium.jpg', 'Arabica_Premium', 'Colombia', '250g', 'Ngọt, Chua nhẹ', '2023-09-01', '2024-09-01', 'in_stock', 4.8, 150, TRUE, TRUE, FALSE, FALSE),
+('Cà phê Robusta Strong', 'Cà phê Robusta với hương vị đậm đà và mạnh mẽ.', 150000, 'img/Robusta.jpg', 'Robusta', 'Việt Nam', '500g', 'Đắng, Hơi chua', '2023-08-15', '2024-08-15', 'in_stock', 4.5, 200, FALSE, FALSE, TRUE, TRUE),
+('Cà phê Espresso Classic', 'Cà phê Espresso chuẩn Ý, đậm đà và tinh tế.', 200000, 'img/Espresso.jpg', 'Espresso', 'Italy', '100g', 'Đắng, Đậm', '2023-10-01', '2024-10-01', 'in_stock', 4.9, 100, FALSE, TRUE, TRUE, FALSE),
+('Cà phê Moka Java', 'Cà phê Moka với hương vị độc đáo.', 160000, 'img/Moka.jpg', 'Moka', 'Indonesia', '250g', 'Ngọt, Đắng', '2023-07-20', '2024-07-20', 'in_stock', 4.7, 80, TRUE, FALSE, FALSE, TRUE),
+('Cà phê Cold Brew', 'Cà phê pha lạnh mát lạnh, rất thích hợp trong mùa hè.', 140000, 'img/ColdBrew.jpg', 'Cold Brew', 'Brazil', '300g', 'Ngọt, Mát', '2023-09-10', '2024-09-10', 'in_stock', 4.6, 120, TRUE, FALSE, FALSE, FALSE),
+
+('Cà phê Decaf', 'Cà phê không caffeine, thích hợp cho người nhạy cảm.', 170000, 'img/Dacaf.jpg', 'Decaf', 'Colombia', '250g', 'Ngọt, Thơm', '2023-09-12', '2024-09-12', 'in_stock', 4.4, 90, TRUE, FALSE, FALSE, FALSE);
+
