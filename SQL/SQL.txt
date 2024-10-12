@@ -39,3 +39,32 @@ INSERT INTO coffee_products (name, description, price, image_url, coffee_type, o
 
 ('Cà phê Decaf', 'Cà phê không caffeine, thích hợp cho người nhạy cảm.', 170000, 'img/Dacaf.jpg', 'Decaf', 'Colombia', '250g', 'Ngọt, Thơm', '2023-09-12', '2024-09-12', 'in_stock', 4.4, 90, TRUE, FALSE, FALSE, FALSE);
 
+INSERT INTO coffee_products (name, description, price, image_url, coffee_type, origin, weight, flavor, production_date, expiry_date, status, rating, quantity, is_new, is_featured, is_best_seller, is_normal) 
+VALUES 
+
+('Cà phê Blue Mountain', 'Cà phê Blue Mountain từ Jamaica, được đánh giá là một trong những loại cà phê ngon nhất thế giới.', 350000, 'img/BlueMountain.jpg', 'Blue Mountain', 'Jamaica', '200g', 'Ngọt, Đắng nhẹ', '2023-06-01', '2024-06-01', 'in_stock', 4.9, 50, TRUE, TRUE, FALSE, FALSE),
+
+('Cà phê Geisha', 'Loại cà phê Geisha nổi tiếng với hương thơm và vị chua thanh khiết.', 450000, 'img/Geisha.jpg', 'Geisha', 'Panama', '200g', 'Chua nhẹ, Ngọt', '2023-09-15', '2024-09-15', 'in_stock', 4.9, 30, TRUE, TRUE, FALSE, FALSE),
+
+
+('Cà phê Brazil Santos', 'Cà phê từ vùng Santos, Brazil, nổi tiếng với vị ngọt nhẹ và hương thơm dễ chịu.', 220000, 'img/BrazilSantos.jpg', 'Brazil Santos', 'Brazil', '250g', 'Ngọt, Thơm nhẹ', '2023-08-10', '2024-08-10', 'in_stock', 4.7, 80, FALSE, TRUE, FALSE, FALSE),
+
+('Cà phê Sumatra Mandheling', 'Cà phê Sumatra Mandheling với hương vị đặc trưng đậm đà và hậu vị mạnh mẽ.', 240000, 'img/Sumatra.jpg', 'Mandheling', 'Indonesia', '250g', 'Đậm đà, Đắng', '2023-07-20', '2024-07-20', 'in_stock', 4.8, 70, FALSE, TRUE, TRUE, FALSE),
+
+
+('Cà phê Ethiopia Yirgacheffe', 'Cà phê Ethiopia Yirgacheffe với hương vị trái cây và vị chua tinh tế, một trong những sản phẩm bán chạy nhất.', 300000, 'img/Yirgacheffe.jpg', 'Yirgacheffe', 'Ethiopia', '200g', 'Chua, Trái cây', '2023-05-01', '2024-05-01', 'in_stock', 4.9, 100, FALSE, FALSE, TRUE, FALSE),
+
+('Cà phê Luwak', 'Cà phê chồn từ Indonesia, với hương vị phong phú và hậu vị độc đáo.', 500000, 'img/Luwak.jpg', 'Luwak', 'Indonesia', '150g', 'Đắng, Đậm', '2023-08-05', '2024-08-05', 'in_stock', 4.8, 50, FALSE, FALSE, TRUE, TRUE),
+('Cà phê Bourbon', 'Cà phê Bourbon có hương vị phức tạp với độ chua nhẹ và vị ngọt tự nhiên.', 320000, 'img/Bourbon.jpg', 'Bourbon', 'Rwanda', '250g', 'Ngọt, Chua nhẹ', '2023-06-15', '2024-06-15', 'in_stock', 4.7, 60, TRUE, TRUE, FALSE, FALSE),
+
+('Cà phê Typica', 'Loại cà phê Typica cổ điển với vị đắng dịu và hậu vị ngọt nhẹ nhàng.', 230000, 'img/Typica.jpg', 'Typica', 'Mexico', '200g', 'Đắng nhẹ, Ngọt', '2023-08-05', '2024-08-05', 'in_stock', 4.5, 100, TRUE, FALSE, FALSE, TRUE),
+
+-- Sản phẩm nổi bật
+('Cà phê Kenya AA', 'Cà phê Kenya AA nổi bật với vị chua mạnh, đậm đà và hương thơm dễ chịu.', 270000, 'img/KenyaAA.jpg', 'Kenya AA', 'Kenya', '250g', 'Chua, Đậm', '2023-07-01', '2024-07-01', 'in_stock', 4.8, 90, FALSE, TRUE, FALSE, TRUE),
+
+('Cà phê Sulawesi Toraja', 'Cà phê Sulawesi Toraja từ Indonesia, có vị ngọt nhẹ với hương gỗ độc đáo.', 260000, 'img/Sulawesi.jpg', 'Toraja', 'Indonesia', '300g', 'Ngọt nhẹ, Gỗ', '2023-09-10', '2024-09-10', 'in_stock', 4.6, 75, FALSE, TRUE, TRUE, FALSE),
+
+-- Sản phẩm bán chạy
+('Cà phê Peru Organic', 'Cà phê Peru hữu cơ với hương vị cân bằng, nhẹ nhàng và hậu vị ngọt.', 210000, 'img/PeruOrganic.jpg', 'Peru Organic', 'Peru', '250g', 'Ngọt, Đắng nhẹ', '2023-08-01', '2024-08-01', 'in_stock', 4.7, 110, FALSE, FALSE, TRUE, TRUE),
+
+('Cà phê Kona Hawaii', 'Cà phê Kona từ Hawaii nổi tiếng với hương vị tinh tế và mượt mà.', 450000, 'img/Kona.jpg', 'Kona', 'Hawaii', '200g', 'Mượt mà, Thơm', '2023-06-20', '2024-06-20', 'in_stock', 4.9, 50, FALSE, FALSE, TRUE, FALSE);
