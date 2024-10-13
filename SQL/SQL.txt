@@ -68,3 +68,14 @@ VALUES
 ('Cà phê Peru Organic', 'Cà phê Peru hữu cơ với hương vị cân bằng, nhẹ nhàng và hậu vị ngọt.', 210000, 'img/PeruOrganic.jpg', 'Peru Organic', 'Peru', '250g', 'Ngọt, Đắng nhẹ', '2023-08-01', '2024-08-01', 'in_stock', 4.7, 110, FALSE, FALSE, TRUE, TRUE),
 
 ('Cà phê Kona Hawaii', 'Cà phê Kona từ Hawaii nổi tiếng với hương vị tinh tế và mượt mà.', 450000, 'img/Kona.jpg', 'Kona', 'Hawaii', '200g', 'Mượt mà, Thơm', '2023-06-20', '2024-06-20', 'in_stock', 4.9, 50, FALSE, FALSE, TRUE, FALSE);
+
+
+CREATE TABLE contact (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(15),
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
