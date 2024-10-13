@@ -59,34 +59,42 @@ $result_best_seller = $conn->query($sql_best_seller);
 
 
             <nav id="navbar" class="hidden md:flex space-x-6">
-                <a class="text-coffee-light hover:text-coffee" href="index.php">HOME</a>
-                <a class="text-coffee-light hover:text-coffee" href="#">ABOUT</a>
-                <a class="text-coffee-light hover:text-coffee" href="product.php">PRODUCT</a>
-                <a class="text-coffee-light hover:text-coffee" href="#">CONTACT</a>
+                <div class="nav-item">
+                    <a class="text-coffee-light" href="index.php">HOME</a>
+                </div>
+                <div class="nav-item">
+                    <a class="text-coffee-light" href="about.php">ABOUT</a>
+                </div>
+                <div class="nav-item">
+                    <a class="text-coffee-light" href="product.php">PRODUCT</a>
+                </div>
+                <div class="nav-item">
+                    <a class="text-coffee-light" href="contact.php">CONTACT</a>
+                </div>
             </nav>
+
 
 
             <div class="flex justify-between items-center">
                 <div class="relative inline-block">
-                <i class="icon_search fa-solid fa-magnifying-glass  left-3 top-1/2 transform -translate-y-1/2"
-                "></i>
+                    <i class="icon_search fa-solid fa-magnifying-glass  left-3 top-1/2 transform -translate-y-1/2"></i>
                     <input class="input_search pl-10 pr-10" type="text" placeholder="Searching...">
                 </div>
 
                 <?php if (isset($_SESSION['username'])): ?>
-                    <div class="relative inline-block">
-                        <img src="data:image/jpeg;base64,<?php echo htmlspecialchars($_SESSION['avatar']); ?>" alt="Avatar"
-                            class="w-8 h-8 rounded-full ml-2 hover:cursor-pointer"> 
+                <div class="relative inline-block">
+                    <img src="data:image/jpeg;base64,<?php echo htmlspecialchars($_SESSION['avatar']); ?>" alt="Avatar"
+                        class="w-8 h-8 rounded-full ml-2 hover:cursor-pointer">
 
 
-                        <span class="absolute  bg-white text-coffee-dark rounded hidden group-hover:block">
-                            <?php echo htmlspecialchars($_SESSION['username']); ?>
-                        </span>
-                    </div>
-                    <a href="logout.php" class="m-1 text-coffee-light hover:text-coffee"><i
-                            class="fa-solid fa-right-from-bracket"></i></a>
+                    <span class="absolute  bg-white text-coffee-dark rounded hidden group-hover:block">
+                        <?php echo htmlspecialchars($_SESSION['username']); ?>
+                    </span>
+                </div>
+                <a href="logout.php" class="m-1 text-coffee-light hover:text-coffee"><i
+                        class="fa-solid fa-right-from-bracket"></i></a>
                 <?php else: ?>
-                    <a href="login.php"><i class="p-1 icon_user fa-solid fa-user"></i></a>
+                <a href="login.php"><i class="p-1 icon_user fa-solid fa-user"></i></a>
                 <?php endif; ?>
             </div>
         </div>
@@ -97,23 +105,22 @@ $result_best_seller = $conn->query($sql_best_seller);
         <nav id="dropdown-menu" class="sm:hidden hidden">
             <ul class="bg-coffee-light text-coffee-dark space-y-2 p-4">
                 <li><a class="block hover:text-coffee" href="index.php">HOME</a></li>
-                <li><a class="block hover:text-coffee" href="#">ABOUT</a></li>
+                <li><a class="block hover:text-coffee" href="about.php">ABOUT</a></li>
                 <li><a class="block hover:text-coffee" href="product.php">PRODUCT</a></li>
-                <li><a class="block hover:text-coffee" href="#">CONTACT</a></li>
+                <li><a class="block hover:text-coffee" href="contact.php">CONTACT</a></li>
             </ul>
         </nav>
         <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const navbar = document.getElementById('navbar');
 
-            const menuToggle = document.getElementById('menu-toggle');
-            const dropdownMenu = document.getElementById('dropdown-menu');
-            const navbar = document.getElementById('navbar');
 
+        menuToggle.addEventListener('click', () => {
 
-            menuToggle.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
 
-                dropdownMenu.classList.toggle('hidden');
-
-            });
+        });
         </script>
     </header>
     <!-- Main Content
@@ -128,74 +135,89 @@ $result_best_seller = $conn->query($sql_best_seller);
     </main> -->
     <div class="main_banner">
 
-<i onclick="prevSlide()" class="prev_button fa-solid fa-chevron-left"></i>
-<img class="banner_img  " src="/img/banner/banner1.png" alt="">
-<img class="banner_img " src="/img/banner/banner2.png" alt="">
+        <i onclick="prevSlide()" class="prev_button fa-solid fa-chevron-left"></i>
+        <img class="banner_img  " src="img/banner/banner1.png" alt="">
+        <img class="banner_img " src="img/banner/banner2.png" alt="">
 
-<i onclick="nextSlide()" class="next_button fa-solid fa-chevron-right"></i>
-</div>
-
-<script src="js.js"></script>
-
- <!-- Phần sản phẩm -->
-<section class="py-16 bg-coffee-dark">
-    <div class="container mx-auto text-center">
-        <!-- Sản phẩm mới -->
-        <h2 class="text-3xl font-bold mb-6">Sản phẩm mới</h2>
-        <div class="grid grid-cols-3 gap-8">
-            <?php
-            if ($result_new->num_rows > 0) {
-                while ($row = $result_new->fetch_assoc()) {
-                    echo '<div class="bg-coffee-light p-8 rounded">';
-                    echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />';
-                    echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
-                    echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
-                    echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
-                    echo '</div>';
-                }
-            }
-            ?>
-        </div>
-
-        <!-- Sản phẩm nổi bật -->
-        <h2 class="text-3xl font-bold my-6">Sản phẩm nổi bật</h2>
-        <div class="grid grid-cols-3 gap-8">
-            <?php
-            if ($result_featured->num_rows > 0) {
-                while ($row = $result_featured->fetch_assoc()) {
-                    echo '<div class="bg-coffee-light p-8 rounded">';
-                    echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class=" rounded-full mx-auto mb-4" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />';
-                    echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
-                    echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
-                    echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
-                    echo '</div>';
-                }
-            }
-            ?>
-        </div>
-
-        <!-- Sản phẩm bán chạy -->
-        <h2 class="text-3xl font-bold my-6">Sản phẩm bán chạy</h2>
-        <div class="grid grid-cols-3 gap-8">
-            <?php
-            if ($result_best_seller->num_rows > 0) {
-                while ($row = $result_best_seller->fetch_assoc()) {
-                    echo '<div class="bg-coffee-light p-8 rounded">';
-                    echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class=" rounded-full mx-auto mb-4" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />';
-                    echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
-                    echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
-                    echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
-                    echo '</div>';
-                }
-            }
-            $conn->close();
-            ?>
-        </div>
+        <i onclick="nextSlide()" class="next_button fa-solid fa-chevron-right"></i>
     </div>
-</section>
+
+    <script src="js.js"></script>
+
+    <!-- Phần sản phẩm -->
+    <section class="py-16 bg-coffee-dark">
+        <div class="container mx-auto text-center">
+            <!-- Sản phẩm mới -->
+            <h2 class="text-3xl font-bold mb-6">Sản phẩm mới</h2>
+            <div class="grid grid-cols-3 gap-8">
+                <?php
+                if ($result_new->num_rows > 0) {
+                    while ($row = $result_new->fetch_assoc()) {
+                        echo '<div class="product-item bg-coffee-light p-8 rounded hover:shadow-lg transition-shadow duration-300">'; // Thêm lớp hover và shadow
+                        echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4 transition-transform duration-300 hover:scale-110" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />'; // Hiệu ứng phóng to hình ảnh
+                        echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
+                        echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
+                        echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
+                        // Icon giỏ hàng
+                        echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
+                        // Icon trái tim
+                        echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
+                        echo '</div>';
+                    }
+                }
+                ?>
+            </div>
+
+            <!-- Sản phẩm nổi bật -->
+            <h2 class="text-3xl font-bold my-6">Sản phẩm nổi bật</h2>
+            <div class="grid grid-cols-3 gap-8">
+                <?php
+                if ($result_featured->num_rows > 0) {
+                    while ($row = $result_featured->fetch_assoc()) {
+                        echo '<div class="product-item bg-coffee-light p-8 rounded hover:shadow-lg transition-shadow duration-300">'; // Thêm lớp hover và shadow
+                        echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4 transition-transform duration-300 hover:scale-110" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />'; // Hiệu ứng phóng to hình ảnh
+                        echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
+                        echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
+                        echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
+                        // Icon giỏ hàng
+                        echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
+                        // Icon trái tim
+                        echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
+                        echo '</div>';
+                    }
+                }
+                ?>
+            </div>
+
+            <!-- Sản phẩm bán chạy -->
+            <h2 class="text-3xl font-bold my-6">Sản phẩm bán chạy</h2>
+            <div class="grid grid-cols-3 gap-8">
+                <?php
+                if ($result_best_seller->num_rows > 0) {
+                    while ($row = $result_best_seller->fetch_assoc()) {
+                        echo '<div class="product-item bg-coffee-light p-8 rounded hover:shadow-lg transition-shadow duration-300">'; // Thêm lớp hover và shadow
+                        echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4 transition-transform duration-300 hover:scale-110" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />'; // Hiệu ứng phóng to hình ảnh
+                        echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
+                        echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
+                        echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
+                        // Icon giỏ hàng
+                        echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
+                        // Icon trái tim
+                        echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
+                        echo '</div>';
+                    }
+                }
+                $conn->close();
+                ?>
+            </div>
+        </div>
+    </section>
+
 
     <footer class="bg-coffee py-4">
         <div class="container mx-auto flex justify-between items-center">
+
+
             <div class="flex space-x-4">
                 <a class="text-coffee-light hover:text-coffee" href="#">PRIVACY POLICY</a>
                 <a class="text-coffee-light hover:text-coffee" href="#">TERMS OF USE</a>

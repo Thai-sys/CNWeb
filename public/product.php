@@ -58,17 +58,23 @@ $result_best_seller = $conn->query($sql_best_seller);
 
 
             <nav id="navbar" class="hidden md:flex space-x-6">
-                <a class="text-coffee-light hover:text-coffee" href="index.php">HOME</a>
-                <a class="text-coffee-light hover:text-coffee" href="#">ABOUT</a>
-                <a class="text-coffee-light hover:text-coffee" href="product.php">PRODUCT</a>
-                <a class="text-coffee-light hover:text-coffee" href="#">CONTACT</a>
+                <div class="nav-item">
+                    <a class="text-coffee-light" href="index.php">HOME</a>
+                </div>
+                <div class="nav-item">
+                    <a class="text-coffee-light" href="about.php">ABOUT</a>
+                </div>
+                <div class="nav-item">
+                    <a class="text-coffee-light" href="product.php">PRODUCT</a>
+                </div>
+                <div class="nav-item">
+                    <a class="text-coffee-light" href="contact.php">CONTACT</a>
+                </div>
             </nav>
-            
 
             <div class="flex justify-between items-center">
                 <div class="relative inline-block">
-                <i class="icon_search fa-solid fa-magnifying-glass  left-3 top-1/2 transform -translate-y-1/2"
-                "></i>
+                    <i class="icon_search fa-solid fa-magnifying-glass  left-3 top-1/2 transform -translate-y-1/2"></i>
                     <input class="input_search pl-10 pr-10" type="text" placeholder="Searching...">
                 </div>
 
@@ -94,17 +100,16 @@ $result_best_seller = $conn->query($sql_best_seller);
         <button id="menu-toggle" class="text-coffee-light md:hidden">
             <i class="fas fa-bars"></i>
         </button>
-        
+
         <nav id="dropdown-menu" class="sm:hidden hidden">
             <ul class="bg-coffee-light text-coffee-dark space-y-2 p-4">
                 <li><a class="block hover:text-coffee" href="#">HOME</a></li>
-                <li><a class="block hover:text-coffee" href="#">ABOUT</a></li>
+                <li><a class="block hover:text-coffee" href="about.php">ABOUT</a></li>
                 <li><a class="block hover:text-coffee" href="#">PRODUCT</a></li>
-                <li><a class="block hover:text-coffee" href="#">CONTACT</a></li>
+                <li><a class="block hover:text-coffee" href="contact.php">CONTACT</a></li>
             </ul>
         </nav>
         <script>
-
             const menuToggle = document.getElementById('menu-toggle');
             const dropdownMenu = document.getElementById('dropdown-menu');
             const navbar = document.getElementById('navbar');
@@ -117,49 +122,55 @@ $result_best_seller = $conn->query($sql_best_seller);
             });
         </script>
     </header>
-   
-    
+
+
     <main>
-    
+
         <div class="main_banner">
 
             <i onclick="prevSlide()" class="prev_button fa-solid fa-chevron-left"></i>
-            <img class="banner_img " src="/img/banner/banner1.png" alt="">
-            <img class="banner_img " src="/img/banner/banner2.png" alt="">
+            <img class="banner_img " src="img/banner/banner1.png" alt="">
+            <img class="banner_img " src="img/banner/banner2.png" alt="">
 
             <i onclick="nextSlide()" class="next_button fa-solid fa-chevron-right"></i>
         </div>
-            
+
         <script src="js.js"></script>
-        
+
         <section class="py-16 bg-coffee-dark" id="product-section">
-            
-        <div class="text-center my-4">
-            <button onclick="showProducts('best_seller')"
-                class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm bán
-                chạy</button>
-            <button onclick="showProducts('featured')"
-                class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm nổi bật</button>
-            <button onclick="showProducts('new')"
-                class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm mới ra
-                mắt</button>
-            <button onclick="showProducts('domestic')"
-                class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm nội địa</button>
-            <button onclick="showProducts('imported')"
-                class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm ngoại
-                địa</button>
-        </div>
+
+            <div class="text-center my-4">
+                <button onclick="showProducts('best_seller')"
+                    class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm bán
+                    chạy</button>
+                <button onclick="showProducts('featured')"
+                    class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm nổi
+                    bật</button>
+                <button onclick="showProducts('new')"
+                    class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm mới ra
+                    mắt</button>
+                <button onclick="showProducts('domestic')"
+                    class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm nội
+                    địa</button>
+                <button onclick="showProducts('imported')"
+                    class="product-button mx-2 py-2 px-4 bg-coffee-dark text-coffee-light rounded">Sản phẩm ngoại
+                    địa</button>
+            </div>
             <div class="container mx-auto text-center" id="product-container">
                 <h2 class="text-3xl font-bold mb-6" id="product-title">Sản phẩm bán chạy</h2>
                 <div class="grid grid-cols-3 gap-8" id="best-seller-products">
                     <?php
                     if ($result_best_seller->num_rows > 0) {
                         while ($row = $result_best_seller->fetch_assoc()) {
-                            echo '<div class="bg-coffee-light p-8 rounded">';
+                            echo '<div class="bg-coffee-light p-8 rounded product-item">';
                             echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />';
                             echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
                             echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
                             echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
+                            // Icon giỏ hàng
+                            echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
+                            // Icon trái tim
+                            echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
                             echo '</div>';
                         }
                     }
@@ -171,11 +182,15 @@ $result_best_seller = $conn->query($sql_best_seller);
                     <?php
                     if ($result_featured->num_rows > 0) {
                         while ($row = $result_featured->fetch_assoc()) {
-                            echo '<div class="bg-coffee-light p-8 rounded">';
+                            echo '<div class="bg-coffee-light p-8 rounded product-item">';
                             echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />';
                             echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
                             echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
                             echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
+                            // Icon giỏ hàng
+                            echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
+                            // Icon trái tim
+                            echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
                             echo '</div>';
                         }
                     }
@@ -186,11 +201,15 @@ $result_best_seller = $conn->query($sql_best_seller);
                     <?php
                     if ($result_new->num_rows > 0) {
                         while ($row = $result_new->fetch_assoc()) {
-                            echo '<div class="bg-coffee-light p-8 rounded">';
+                            echo '<div class="bg-coffee-light p-8 rounded product-item">';
                             echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />';
                             echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
                             echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
                             echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
+                            // Icon giỏ hàng
+                            echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
+                            // Icon trái tim
+                            echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
                             echo '</div>';
                         }
                     }

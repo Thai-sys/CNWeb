@@ -2,12 +2,12 @@
 
 //banner
 
-const slides =document.querySelectorAll('.main_banner img')
-const totalSlides=slides.length;
-let Index=0;
+const slides = document.querySelectorAll('.main_banner img')
+const totalSlides = slides.length;
+let Index = 0;
 let intervalId;
-for(let i=1;i<totalSlides;i++){
-    slides[i].style.display='none';
+for (let i = 1; i < totalSlides; i++) {
+    slides[i].style.display = 'none';
 }
 
 
@@ -15,7 +15,7 @@ for(let i=1;i<totalSlides;i++){
 function showSlide(index) {
     slides.forEach(slide => {
         slide.style.display = 'none';
-        
+
     });
     if (index < 0) {
         Index = totalSlides - 1;
@@ -25,7 +25,7 @@ function showSlide(index) {
         Index = index;
     }
     slides[Index].style.display = 'block';
-    
+
 }
 
 
@@ -51,14 +51,14 @@ startSlideshow();
 
 // product
 function showProducts(category) {
-    
+
     document.getElementById('best-seller-products').classList.add('hidden');
     document.getElementById('featured-products').classList.add('hidden');
     document.getElementById('new-products').classList.add('hidden');
     document.getElementById('domestic-products').classList.add('hidden');
     document.getElementById('imported-products').classList.add('hidden');
 
-   
+
     if (category === 'best_seller') {
         document.getElementById('best-seller-products').classList.remove('hidden');
         document.getElementById('product-title').textContent = 'Sản phẩm bán chạy';
@@ -82,7 +82,7 @@ function showProducts(category) {
         button.classList.remove('bg-coffee-light', 'text-coffee-dark'); // Xóa lớp nổi bật
         button.classList.add('bg-coffee-dark', 'text-coffee-light'); // Thêm lớp mặc định
     });
-    
+
     const selectedButton = document.querySelector(`button[onclick="showProducts('${category}')"]`);
     selectedButton.classList.add('bg-coffee-light', 'text-coffee-dark'); // Thêm lớp nổi bật cho nút được chọn
 }
