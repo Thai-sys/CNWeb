@@ -53,7 +53,7 @@ class Product
             echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
             echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
             echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
-            echo '<form action="#" method="POST">';
+            echo '<form action="/cart/add" method="POST">';
             echo '<input type="hidden" name="product_id" value="' . $row['id'] . '">';
             echo '<button class="btn-cart" type="submit"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
             echo '</form>';

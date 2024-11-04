@@ -18,6 +18,11 @@ $router->add('GET', '/register', 'UserController@register'); // Route cho trang 
 $router->add('POST', '/login', 'UserController@login'); // Route cho đăng nhập (phương thức POST)
 $router->add('POST', '/register', 'UserController@register'); // Route cho đăng ký (phương thức POST)
 $router->add('GET', '/logout', 'UserController@logout'); // Route cho đăng xuất
+// router cho giỏ hàng
+$router->add('POST', '/cart/add', 'CartController@addToCart'); // Route cho thêm sản phẩm vào giỏ hàng
+$router->add('POST', '/cart/update', 'CartController@updateCart'); // Route cho cập nhật giỏ hàng
+$router->add('POST', '/cart/remove', 'CartController@removeFromCart'); // Route cho xóa sản phẩm khỏi giỏ hàng
+$router->add('GET', '/cart', 'CartController@showCart'); // Route cho hiển thị giỏ hàng
 // ... các route khác ...
 
 

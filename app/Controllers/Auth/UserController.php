@@ -1,11 +1,14 @@
 <?php
 require '../app/Models/User.php'; // Import Model User
+require '../app/Models/Cart.php';
 class UserController
 {
     private $userModel;
+    private $cart;
     public function __construct($db)
     {
         $this->userModel = new User($db);
+        $this->cart = new Cart($db);
     }
 
     public function login()
@@ -33,6 +36,8 @@ class UserController
                     $_SESSION['username'] = $row['user_name'];
                     $_SESSION['user_id'] = $row['id'];
                     $_SESSION['avatar_login'] = $row['avatar']; // Lưu avatar vào session
+                    // Cập nhật số lượng sản phẩm trong giỏ hàng
+                    $_SESSION['cart_count'] = $this->cart->getTotalQuantity($_SESSION['user_id']);
                     header("Location: /"); // Chuyển hướng đến trang chính
                     exit();
                 } else {

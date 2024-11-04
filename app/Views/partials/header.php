@@ -42,6 +42,17 @@
                     <i class="icon_search fa-solid fa-magnifying-glass left-3 top-1/2 transform -translate-y-1/2"></i>
                     <input class="input_search pl-10 pr-10" type="text" placeholder="Searching...">
                 </div>
+                <button type="button" class="relative cart inline-block ml-2" onclick="location.href='/cart'">
+                    <span class="bg-coffee-dark text-white p-2 cursor-pointer no-hover cart-item">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                    </span>
+                    <?php if (!empty($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
+                        <span
+                            class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center no-hover">
+                            <?= $_SESSION['cart_count'] ?>
+                        </span>
+                    <?php endif; ?>
+                </button>
                 <?php if (isset($_SESSION['username'])): ?>
                     <div class="relative inline-block group">
                         <img src="/img/avatars/<?php echo htmlspecialchars($_SESSION['avatar_login']); ?>" alt="Avatar"
