@@ -79,3 +79,38 @@ CREATE TABLE contact (
     message TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+giỏ hàng:
+CREATE TABLE cart_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL CHECK (quantity > 0), -- Đảm bảo số lượng phải lớn hơn 0
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Thời gian sản phẩm được thêm vào giỏ hàng
+    FOREIGN KEY (user_id) REFERENCES user_datas(id), -- Tham chiếu đến bảng người dùng
+    FOREIGN KEY (product_id) REFERENCES coffee_products(id) -- Tham chiếu đến bảng sản phẩm
+);
+
+user
+CREATE TABLE user_datas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(255) NOT NULL UNIQUE,
+    user_password VARCHAR(255) NOT NULL,
+    avatar VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+bản order lưu dữ liệu đặt hàng
+CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,                    -- ID của người dùng
+    name VARCHAR(100) NOT NULL,      -- Tên người đặt hàng
+    address TEXT NOT NULL,           -- Địa chỉ
+    phone VARCHAR(15) NOT NULL,      -- Số điện thoại
+    items TEXT NOT NULL,             -- Lưu thông tin sản phẩm dưới dạng JSON
+    total_price DECIMAL(10, 2) NOT NULL,  -- Tổng giá trị đơn hàng
+    status TINYINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Thời gian tạo đơn hàng
+    FOREIGN KEY (user_id) REFERENCES user_datas(id)
+);

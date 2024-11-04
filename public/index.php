@@ -1,235 +1,46 @@
 <?php
-session_start(); // Khởi động phiên
+// public/index.php
 
-// Thông tin kết nối cơ sở dữ liệu
-$servername = "localhost";  // Tên máy chủ
-$username = "root";         // Tên đăng nhập MySQL
-$password = "";             // Mật khẩu MySQL (để trống nếu dùng XAMPP)
-$dbname = "coffee-time";    // Tên cơ sở dữ liệu
+require_once '../config/config.php'; // Kết nối với cơ sở dữ liệu
+require_once '../src/Core/Router.php'; // Router
 
-// Tạo kết nối
-$conn = new mysqli($servername, $username, $password, $dbname);
+$router = new Router();
 
-// Kiểm tra kết nối
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
+// Định nghĩa các route
+$router->add('GET', '/', 'HomeController@index'); // Route cho trang chủ
+$router->add('GET', '/product', 'ProductController@index'); // Route cho trang product
+$router->add('GET', '/about', 'AboutController@index'); // Route cho trang about
+$router->add('GET', '/contact', 'ContactController@showForm'); // Route hiển thị form liên hệ
+$router->add('POST', '/contact', 'ContactController@handleFormSubmission'); // Route xử lý gửi form liên hệ
+// route cho đăng nhập đăng kí
+$router->add('GET', '/login', 'UserController@login'); // Route cho trang đăng nhập
+$router->add('GET', '/register', 'UserController@register'); // Route cho trang đăng ký
+$router->add('POST', '/login', 'UserController@login'); // Route cho đăng nhập (phương thức POST)
+$router->add('POST', '/register', 'UserController@register'); // Route cho đăng ký (phương thức POST)
+$router->add('GET', '/logout', 'UserController@logout'); // Route cho đăng xuất
+// ... các route khác ...
+
+
+// Lấy URI và phương thức HTTP
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
+
+// Tìm kiếm controller
+$controller = $router->route($uri, $method);
+if ($controller) {
+    list($controllerName, $methodName) = explode('@', $controller);
+
+    if ($controllerName === 'UserController') {
+        require_once "../app/Controllers/Auth/UserController.php";
+    } else {
+        require_once "../app/Controllers/{$controllerName}.php"; // Đối với các controller khác
+    }
+
+    // Khởi tạo controller với PDO instance
+    $controllerInstance = new $controllerName($pdo); // Truyền PDO instance
+    // Gọi phương thức trong controller
+    $controllerInstance->$methodName();
+} else {
+    http_response_code(404);
+    echo "404 Not Found: Route not found.";
 }
-
-$sql_new = "SELECT name, description, price, image_url FROM coffee_products WHERE is_new = TRUE ORDER BY RAND() LIMIT 6";
-$result_new = $conn->query($sql_new);
-
-
-$sql_featured = "SELECT name, description, price, image_url FROM coffee_products WHERE is_featured = TRUE ORDER BY RAND() LIMIT 6";
-$result_featured = $conn->query($sql_featured);
-
-
-$sql_best_seller = "SELECT name, description, price, image_url FROM coffee_products WHERE is_best_seller = TRUE ORDER BY RAND() LIMIT 6";
-$result_best_seller = $conn->query($sql_best_seller);
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffee Time</title>
-
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" />
-
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body class="bg-coffee text-coffee-light">
-    <header class="bg-coffee-dark py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-center">
-                <img alt="Coffee Time Logo" class="mx-auto" height="100"
-                    src="https://storage.googleapis.com/a1aa/image/PC1fTEHtLTQlIajemnhwfKjwD9JqWFlKVJmhNY63L0iFktGnA.jpg"
-                    width="100" />
-                <h1 class="text-2xl font-bold">Coffee Time</h1>
-                <p class="text-sm">100% Organic Quality Coffee</p>
-            </div>
-
-
-
-
-            <nav id="navbar" class="hidden md:flex space-x-6">
-                <div class="nav-item">
-                    <a class="text-coffee-light" href="index.php">HOME</a>
-                </div>
-                <div class="nav-item">
-                    <a class="text-coffee-light" href="about.php">ABOUT</a>
-                </div>
-                <div class="nav-item">
-                    <a class="text-coffee-light" href="product.php">PRODUCT</a>
-                </div>
-                <div class="nav-item">
-                    <a class="text-coffee-light" href="contact.php">CONTACT</a>
-                </div>
-            </nav>
-
-
-
-            <div class="flex justify-between items-center">
-                <div class="relative inline-block">
-                    <i class="icon_search fa-solid fa-magnifying-glass  left-3 top-1/2 transform -translate-y-1/2"></i>
-                    <input class="input_search pl-10 pr-10" type="text" placeholder="Searching...">
-                </div>
-
-                <?php if (isset($_SESSION['username'])): ?>
-                <div class="relative inline-block">
-                    <img src="data:image/jpeg;base64,<?php echo htmlspecialchars($_SESSION['avatar']); ?>" alt="Avatar"
-                        class="w-8 h-8 rounded-full ml-2 hover:cursor-pointer">
-
-
-                    <span class="absolute  bg-white text-coffee-dark rounded hidden group-hover:block">
-                        <?php echo htmlspecialchars($_SESSION['username']); ?>
-                    </span>
-                </div>
-                <a href="logout.php" class="m-1 text-coffee-light hover:text-coffee"><i
-                        class="fa-solid fa-right-from-bracket"></i></a>
-                <?php else: ?>
-                <a href="login.php"><i class="p-1 icon_user fa-solid fa-user"></i></a>
-                <?php endif; ?>
-            </div>
-        </div>
-        <button id="menu-toggle" class="text-coffee-light md:hidden">
-            <i class="fas fa-bars"></i>
-        </button>
-
-        <nav id="dropdown-menu" class="sm:hidden hidden">
-            <ul class="bg-coffee-light text-coffee-dark space-y-2 p-4">
-                <li><a class="block hover:text-coffee" href="index.php">HOME</a></li>
-                <li><a class="block hover:text-coffee" href="about.php">ABOUT</a></li>
-                <li><a class="block hover:text-coffee" href="product.php">PRODUCT</a></li>
-                <li><a class="block hover:text-coffee" href="contact.php">CONTACT</a></li>
-            </ul>
-        </nav>
-        <script>
-        const menuToggle = document.getElementById('menu-toggle');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-        const navbar = document.getElementById('navbar');
-
-
-        menuToggle.addEventListener('click', () => {
-
-            dropdownMenu.classList.toggle('hidden');
-
-        });
-        </script>
-    </header>
-    <!-- Main Content
-    <main class="text-center py-16 bg-cover" style="background-image: url('/img/');">
-        <div class="container mx-auto">
-            <h2 class="text-4xl font-bold mb-4">Khám Phá Hương Vị Cà Phê Tự Nhiên</h2>
-            <p class="text-lg mb-6">Chúng tôi tự hào cung cấp cà phê chất lượng cao, 100% hữu cơ. Hãy trải nghiệm hương
-                vị tuyệt vời và tận hưởng từng ngụm cà phê được chọn lọc kỹ lưỡng từ những vùng đất tốt nhất.</p>
-            <img src="/img/index_banner.jpg" alt="Cà Phê" class="mx-auto mb-6 rounded shadow-lg">
-            <button class="bg-coffee-light text-coffee-dark py-2 px-6 rounded">Khám Phá Ngay</button>
-        </div>
-    </main> -->
-    <div class="main_banner">
-
-        <i onclick="prevSlide()" class="prev_button fa-solid fa-chevron-left"></i>
-        <img class="banner_img  " src="img/banner/banner1.png" alt="">
-        <img class="banner_img " src="img/banner/banner2.png" alt="">
-
-        <i onclick="nextSlide()" class="next_button fa-solid fa-chevron-right"></i>
-    </div>
-
-    <script src="js.js"></script>
-
-    <!-- Phần sản phẩm -->
-    <section class="py-16 bg-coffee-dark">
-        <div class="container mx-auto text-center">
-            <!-- Sản phẩm mới -->
-            <h2 class="text-3xl font-bold mb-6">Sản phẩm mới</h2>
-            <div class="grid grid-cols-3 gap-8">
-                <?php
-                if ($result_new->num_rows > 0) {
-                    while ($row = $result_new->fetch_assoc()) {
-                        echo '<div class="product-item bg-coffee-light p-8 rounded hover:shadow-lg transition-shadow duration-300">'; // Thêm lớp hover và shadow
-                        echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4 transition-transform duration-300 hover:scale-110" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />'; // Hiệu ứng phóng to hình ảnh
-                        echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
-                        echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
-                        echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
-                        // Icon giỏ hàng
-                        echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
-                        // Icon trái tim
-                        echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
-                        echo '</div>';
-                    }
-                }
-                ?>
-            </div>
-
-            <!-- Sản phẩm nổi bật -->
-            <h2 class="text-3xl font-bold my-6">Sản phẩm nổi bật</h2>
-            <div class="grid grid-cols-3 gap-8">
-                <?php
-                if ($result_featured->num_rows > 0) {
-                    while ($row = $result_featured->fetch_assoc()) {
-                        echo '<div class="product-item bg-coffee-light p-8 rounded hover:shadow-lg transition-shadow duration-300">'; // Thêm lớp hover và shadow
-                        echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4 transition-transform duration-300 hover:scale-110" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />'; // Hiệu ứng phóng to hình ảnh
-                        echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
-                        echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
-                        echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
-                        // Icon giỏ hàng
-                        echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
-                        // Icon trái tim
-                        echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
-                        echo '</div>';
-                    }
-                }
-                ?>
-            </div>
-
-            <!-- Sản phẩm bán chạy -->
-            <h2 class="text-3xl font-bold my-6">Sản phẩm bán chạy</h2>
-            <div class="grid grid-cols-3 gap-8">
-                <?php
-                if ($result_best_seller->num_rows > 0) {
-                    while ($row = $result_best_seller->fetch_assoc()) {
-                        echo '<div class="product-item bg-coffee-light p-8 rounded hover:shadow-lg transition-shadow duration-300">'; // Thêm lớp hover và shadow
-                        echo '<img alt="' . htmlspecialchars($row["image_url"]) . '" class="rounded-full mx-auto mb-4 transition-transform duration-300 hover:scale-110" height="100" src="' . htmlspecialchars($row["image_url"]) . '" width="100" />'; // Hiệu ứng phóng to hình ảnh
-                        echo '<h3 class="text-2xl font-bold mb-2">' . htmlspecialchars($row["name"]) . '</h3>';
-                        echo '<p>' . htmlspecialchars($row["description"]) . '</p>';
-                        echo '<p class="font-bold text-lg">Giá: ' . number_format($row["price"], 0, ',', '.') . ' VND</p>';
-                        // Icon giỏ hàng
-                        echo '<button class="btn-cart"><i class="fas fa-shopping-cart"></i> Add Cart</button>';
-                        // Icon trái tim
-                        echo '<button class="btn-heart"><i class="fas fa-heart"></i></button>';
-                        echo '</div>';
-                    }
-                }
-                $conn->close();
-                ?>
-            </div>
-        </div>
-    </section>
-
-
-    <footer class="bg-coffee py-4">
-        <div class="container mx-auto flex justify-between items-center">
-
-
-            <div class="flex space-x-4">
-                <a class="text-coffee-light hover:text-coffee" href="#">PRIVACY POLICY</a>
-                <a class="text-coffee-light hover:text-coffee" href="#">TERMS OF USE</a>
-            </div>
-            <div class="flex space-x-4">
-                <a class="text-coffee-light hover:text-coffee" href="#"><i class="fab fa-facebook-f"></i></a>
-                <a class="text-coffee-light hover:text-coffee" href="#"><i class="fab fa-twitter"></i></a>
-                <a class="text-coffee-light hover:text-coffee" href="#"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-    </footer>
-
-</body>
-
-</html>

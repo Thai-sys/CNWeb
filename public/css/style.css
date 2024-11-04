@@ -67,7 +67,7 @@ body {
 }
 
 /* User */
-.relative:hover span {
+.relative:hover span:not(.no-hover) {
     display: block;
 }
 
