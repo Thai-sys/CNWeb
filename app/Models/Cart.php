@@ -62,4 +62,13 @@ class Cart
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total_quantity'] ? (int)$result['total_quantity'] : 0; // Trả về tổng số lượng hoặc 0
     }
+    // Hàm xóa tất cả sản phẩm trong giỏ hàng của người dùng
+    public function clearCart($user_id)
+    {
+        $sql = "DELETE FROM cart_items WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id);
+
+        return $stmt->execute();
+    }
 }

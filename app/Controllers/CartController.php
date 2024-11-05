@@ -3,13 +3,18 @@
 
 session_start();
 require '../app/Models/Cart.php'; // Nhập mô hình Cart
+require '../app/Models/Orders.php'; // nhập mô hình oredr để sử lí đặt hàng
+require_once '../app/Models/Product.php'; //nhập mô hình product lấy thông tin sản phẩm vào sử lí đặt hàng
 
 class CartController
 {
     private $cart;
+    private $ordersModel;
+    private $productModel;
     public function __construct($db)
     {
         $this->cart = new Cart($db);
+        $this->ordersModel = new Orders($db, $this->productModel);
     }
     public function showCart()
     {
@@ -28,6 +33,7 @@ class CartController
         }
 
         $_SESSION['totalAmount'] = $totalAmount;
+        $_SESSION['cart'] = $cartItems;
         // Truyền dữ liệu vào view
         require '../app/Views/cart.php';
     }
@@ -54,6 +60,7 @@ class CartController
                 // tính tổng tiền
                 $cartItems = $this->cart->getCartItems($user_id);
 
+                $_SESSION['cart'] = $cartItems;
                 $_SESSION['totalAmount'] = 0; // Khởi tạo lại tổng tiền
 
                 // Tính tổng tiền
@@ -80,6 +87,7 @@ class CartController
                 $_SESSION['success'] = "Số lượng sản phẩm đã được cập nhật.";
                 // tính tổng tiền
                 $cartItems = $this->cart->getCartItems($_SESSION['user_id']);
+                $_SESSION['cart'] = $cartItems;
                 $_SESSION['totalAmount'] = 0; // Khởi tạo lại tổng tiền
 
                 // Tính tổng tiền
@@ -105,6 +113,7 @@ class CartController
                 $_SESSION['success'] = "Sản phẩm đã được xóa khỏi giỏ hàng.";
                 // tính tổng tiền
                 $cartItems = $this->cart->getCartItems($_SESSION['user_id']);
+                $_SESSION['cart'] = $cartItems;
                 $_SESSION['totalAmount'] = 0; // Khởi tạo lại tổng tiền
 
                 // Tính tổng tiền
@@ -118,6 +127,47 @@ class CartController
             $_SESSION['cart_count'] = $this->cart->getTotalQuantity($_SESSION['user_id']);
             header("Location: /cart");
             exit();
+        }
+    }
+
+    // Hàm xử lý đặt hàng
+    public function placeOrder()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Lấy thông tin từ form
+            $userId = $_SESSION['user_id'];
+            $name = $_POST['name'];
+            $address = $_POST['address'];
+            $phone = $_POST['phone'];
+            $totalPrice = $_SESSION['totalAmount']; // Tổng tiền từ giỏ hàng
+
+            // Lấy sản phẩm từ giỏ hàng
+            $items = [];
+            foreach ($_SESSION['cart'] as $item) {
+                $items[] = [
+                    'id' => $item['product_id'],
+                    'quantity' => $item['quantity']
+                ];
+            }
+
+            // Chuyển đổi mảng thành chuỗi JSON
+            $itemsJson = json_encode(['products' => $items]);
+
+            // Tạo đơn hàng
+            if ($this->ordersModel->createOrder($userId, $name, $address, $phone, $itemsJson, $totalPrice)) {
+
+                // Nếu lưu thành công, xóa giỏ hàng
+
+                $this->cart->clearCart($userId); // Gọi hàm clearCart để xóa tất cả sản phẩm trong giỏ hàng
+                // Cập nhật số lượng sản phẩm trong giỏ hàng
+                $_SESSION['cart_count'] = $this->cart->getTotalQuantity($_SESSION['user_id']);
+                unset($_SESSION['cart']);
+                $_SESSION['success'] = "Bạn đã đặt hàng thành công, chúng tui sẽ liên hệ với bạn xác nhận và gửi hàng trong 24h tới!";
+                header("Location: /cart");
+                exit;
+            } else {
+                $_SESSION['error'] = "Đặt hàng không thành công. Vui lòng thử lại.";
+            }
         }
     }
 }

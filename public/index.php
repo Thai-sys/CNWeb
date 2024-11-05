@@ -23,6 +23,7 @@ $router->add('POST', '/cart/add', 'CartController@addToCart'); // Route cho thê
 $router->add('POST', '/cart/update', 'CartController@updateCart'); // Route cho cập nhật giỏ hàng
 $router->add('POST', '/cart/remove', 'CartController@removeFromCart'); // Route cho xóa sản phẩm khỏi giỏ hàng
 $router->add('GET', '/cart', 'CartController@showCart'); // Route cho hiển thị giỏ hàng
+$router->add('POST', '/cart/Orders', 'CartController@placeOrder'); // route sử lí đặt hàng
 // ... các route khác ...
 
 
