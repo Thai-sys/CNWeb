@@ -19,6 +19,16 @@ CREATE TABLE coffee_products (
     is_normal BOOLEAN DEFAULT FALSE							-- San pham bt
 );
 
+CREATE TABLE user_data (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(255) NOT NULL UNIQUE,
+    user_password VARCHAR(255) NOT NULL,
+    avatar VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+// tạo tài khoảng admin  mật được mã hóa hiện tại đang là 123456
+INSERT INTO user_data (id, user_name, user_password, avatar)
+VALUES (1, 'admin', '$2y$10$S9mwkLDc7XYCx8o6qAI92uHMW/KvH/.4gX9kNVG45tXZSKoz/Qpla', 'admin.jpg');
 
 
 
@@ -29,7 +39,7 @@ CREATE TABLE coffee_products (
 
 
 
-//////Them du lieu
+
 INSERT INTO coffee_products (name, description, price, image_url, coffee_type, origin, weight, flavor, production_date, expiry_date, status, rating, quantity, is_new, is_featured, is_best_seller, is_normal) VALUES 
 ('Cà phê Arabica Premium', 'Cà phê Arabica chất lượng cao, hương vị thanh khiết.', 180000, 'img/Arabica_Premium.jpg', 'Arabica_Premium', 'Colombia', '250g', 'Ngọt, Chua nhẹ', '2023-09-01', '2024-09-01', 'in_stock', 4.8, 150, TRUE, TRUE, FALSE, FALSE),
 ('Cà phê Robusta Strong', 'Cà phê Robusta với hương vị đậm đà và mạnh mẽ.', 150000, 'img/Robusta.jpg', 'Robusta', 'Việt Nam', '500g', 'Đắng, Hơi chua', '2023-08-15', '2024-08-15', 'in_stock', 4.5, 200, FALSE, FALSE, TRUE, TRUE),
@@ -80,28 +90,20 @@ CREATE TABLE contact (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-giỏ hàng:
+
 CREATE TABLE cart_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0), -- Đảm bảo số lượng phải lớn hơn 0
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Thời gian sản phẩm được thêm vào giỏ hàng
-    FOREIGN KEY (user_id) REFERENCES user_datas(id), -- Tham chiếu đến bảng người dùng
+    FOREIGN KEY (user_id) REFERENCES (id), -- Tham chiếu đến bảng người dùng
     FOREIGN KEY (product_id) REFERENCES coffee_products(id) -- Tham chiếu đến bảng sản phẩm
 );
 
-user
-CREATE TABLE user_datas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_name VARCHAR(255) NOT NULL UNIQUE,
-    user_password VARCHAR(255) NOT NULL,
-    avatar VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 
-bản order lưu dữ liệu đặt hàng
+
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,                    -- ID của người dùng
@@ -112,5 +114,7 @@ CREATE TABLE orders (
     total_price DECIMAL(10, 2) NOT NULL,  -- Tổng giá trị đơn hàng
     status TINYINT NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Thời gian tạo đơn hàng
-    FOREIGN KEY (user_id) REFERENCES user_datas(id)
+    FOREIGN KEY (user_id) REFERENCES user_data(id)
 );
+
+

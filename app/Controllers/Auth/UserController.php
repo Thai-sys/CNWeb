@@ -26,7 +26,7 @@ class UserController
             $username = $_POST['username'];
             $password = $_POST['password'];
 
-            //  tìm kiếm người dùng trong bảng user_datas
+            //  tìm kiếm người dùng trong bảng user_data
             $row = $this->userModel->findByUsername($username);
 
             if ($row) {
@@ -38,11 +38,20 @@ class UserController
                     $_SESSION['avatar_login'] = $row['avatar']; // Lưu avatar vào session
                     // Cập nhật số lượng sản phẩm trong giỏ hàng
                     $_SESSION['cart_count'] = $this->cart->getTotalQuantity($_SESSION['user_id']);
-                    header("Location: /"); // Chuyển hướng đến trang chính
-                    exit();
+                    // Kiểm tra nếu tài khoản là admin với mật khẩu '123456'
+                    if ($username === 'admin' && $password === '123456') {
+                        // Chuyển hướng đến trang admin
+                        header("Location: /admin");
+                        exit();
+                    } else {
+                        header("Location: /"); // Chuyển hướng đến trang chính
+                        exit();
+                    }
                 } else {
                     $error = "Tên đăng nhập hoặc mật khẩu không đúng.";
                 }
+            } else {
+                $error = "Tên đăng nhập hoặc mật khẩu không đúng.";
             }
         }
 

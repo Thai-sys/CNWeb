@@ -24,6 +24,14 @@ $router->add('POST', '/cart/update', 'CartController@updateCart'); // Route cho 
 $router->add('POST', '/cart/remove', 'CartController@removeFromCart'); // Route cho xóa sản phẩm khỏi giỏ hàng
 $router->add('GET', '/cart', 'CartController@showCart'); // Route cho hiển thị giỏ hàng
 $router->add('POST', '/cart/Orders', 'CartController@placeOrder'); // route sử lí đặt hàng
+//Them phan route admin
+$router->add('GET', '/admin', 'AdminController@index'); // Trang quản trị chính
+$router->add('POST', '/admin/product/add', 'AdminController@addProduct'); // Xử lý thêm sản phẩm
+$router->add('POST', '/admin/product/delete', 'AdminController@deleteProduct'); // Xử lý xóa sản phẩm
+$router->add('POST', '/admin/user/delete', 'AdminController@deleteUser'); // xử lý xóa người dùng
+$router->add('POST', '/admin/contact/delete', 'AdminController@deleteContact'); // xử lý xóa contact
+$router->add('POST', '/admin/order', 'AdminController@updateOrder');  // xử lý xóa đơn hàng
+
 // ... các route khác ...
 
 
@@ -38,6 +46,8 @@ if ($controller) {
 
     if ($controllerName === 'UserController') {
         require_once "../app/Controllers/Auth/UserController.php";
+    } elseif ($controllerName === 'AdminController') {
+        require_once "../app/Controllers/Auth/AdminController.php"; // Đường dẫn cho AdminController
     } else {
         require_once "../app/Controllers/{$controllerName}.php"; // Đối với các controller khác
     }
